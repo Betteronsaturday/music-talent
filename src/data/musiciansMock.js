@@ -1,5 +1,5 @@
 /**
- * Mock data for musician discovery prototype (no backend).
+ * Demo musician dataset (no backend).
  */
 
 export const AVAILABILITY = {

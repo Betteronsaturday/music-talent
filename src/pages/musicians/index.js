@@ -56,7 +56,7 @@ export default function MusiciansDiscoverPage() {
             Salento scene (mock)
           </h2>
           <p className="text-xs text-muted-foreground">
-            Profiles are fictional but clustered around the Province of Lecce for the map prototype. Use the{' '}
+            Profiles are fictional but clustered around the Province of Lecce for the map. Use the{' '}
             <strong className="font-medium text-foreground">Map</strong> tab for pins by main instrument, role, and
             experience — same filters and optional GPS apply there.
           </p>

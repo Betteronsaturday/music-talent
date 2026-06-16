@@ -328,7 +328,7 @@ export default function ProfilePortfolio({ musician, viewerIsOwner }) {
               <DialogHeader>
                 <DialogTitle>Pitch “{pitchItem.title}”</DialogTitle>
                 <DialogDescription>
-                  Saved locally in this browser only (mock). In-app messaging is not part of this prototype yet.
+                  Saved locally in this browser only. Messaging is not wired up in this demo yet.
                 </DialogDescription>
               </DialogHeader>
               <Textarea

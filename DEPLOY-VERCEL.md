@@ -1,35 +1,37 @@
-# Share on Vercel (new project)
+# Deploy on Vercel
 
-Your Vercel team slug (from Cursor integration): **`betteronsaturdays-projects`**.
+Production app: **https://musician-discovery-prototype.vercel.app**
 
-## Option A — CLI (works without pushing to GitHub)
+The project is linked to GitHub (`Betteronsaturday/music-talent`). Pushes to **`main`** deploy automatically.
 
-In **your own terminal** (macOS Terminal or Cursor’s terminal on your machine):
+## GitHub → Vercel (recommended)
+
+1. [Vercel Dashboard](https://vercel.com) → project **musician-discovery-prototype**.
+2. **Settings → Git** should show `Betteronsaturday/music-talent`, branch `main`, root directory **`.`**.
+3. Push to `main` on GitHub; Vercel builds with `npm run build`.
+
+## Manual CLI deploy
+
+From the repository root:
 
 ```bash
-cd /Users/andreasabato/Documents/Repository/portfolio/musician-discovery-prototype
-
-npx vercel@latest login
-
-npx vercel@latest deploy --prod --yes \
-  --scope betteronsaturdays-projects \
-  --project musician-discovery-feedback
+npm install -g vercel   # optional
+vercel login
+vercel link             # if not already linked (.vercel/project.json)
+vercel deploy --prod --yes
 ```
 
-- First run creates the **new** project `musician-discovery-feedback` and prints the **Production** URL (share that `https://…vercel.app` link).
-- `--scope` keeps it on your team, not a personal default.
-
-If `--project` is taken globally, pick another name, e.g. `musician-discovery-feedback-2026`.
-
-## Option B — Dashboard + Git
-
-1. Push this repo (or a fork) to GitHub.
-2. [Vercel](https://vercel.com) → **Add New…** → **Project** → **Import** the repo.
-3. Set **Root Directory** to `musician-discovery-prototype`.
-4. Name the project (e.g. `musician-discovery-feedback`) → **Deploy**.
-5. Use the **Production** domain Vercel assigns.
+Team scope (if prompted): **betteronsaturdays-projects**.
 
 ## After deploy
 
-- Open **`/`** or **`/musicians`** on the production URL (your app redirects `/` → `/musicians`).
-- Fix any broken Unsplash image URLs if you see missing avatars in production.
+- `/` redirects to `/musicians/map`.
+- If images fail to load, check Unsplash URLs in `src/data/musiciansMock.js` or swap to your own assets.
+
+## Environment variables
+
+This demo does not require secrets. When you add auth, email, or a database, configure variables in **Vercel → Project → Settings → Environment Variables** and pull locally with:
+
+```bash
+vercel env pull .env.local
+```

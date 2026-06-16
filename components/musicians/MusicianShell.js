@@ -22,7 +22,7 @@ const nav = [
   { href: '/musicians/collabs', label: 'Collabs', Icon: ClipboardList },
 ]
 
-export default function MusicianShell({ children, title = 'Prototype' }) {
+export default function MusicianShell({ children, title = 'Musician discovery' }) {
   const router = useRouter()
   const path = router.pathname
   const asPath = router.asPath.split('?')[0]
@@ -64,11 +64,11 @@ export default function MusicianShell({ children, title = 'Prototype' }) {
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0 flex-1 space-y-1">
                 <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
-                  Concept prototype · inspired flows (mock)
+                  Salento · demo build
                 </p>
                 <h1 className="text-lg font-semibold tracking-tight md:text-xl">Musician discovery</h1>
                 <p className="text-sm text-muted-foreground">
-                  Map · discover · collabs · stories (no backend — messaging later)
+                  Map · discover · collabs · stories
                 </p>
               </div>
               <div className="flex shrink-0 items-start pt-0.5">

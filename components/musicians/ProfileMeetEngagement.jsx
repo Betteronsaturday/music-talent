@@ -17,7 +17,7 @@ function defaultMeetThreadMock() {
   return {
     fromName: 'Salento Scene',
     excerpt:
-      'Prototype thread — the latest in-app message would land here. Your availability stays pinned in the header so nobody has to ask “are you free?” twice.',
+      'Thread preview — the latest message would appear here. Availability stays pinned in the header so scheduling stays in context.',
     proposals: [
       { id: 'demo1', label: 'Thu 20:00 · Rehearsal room (mock slot)' },
       { id: 'demo2', label: 'Sat 18:00 · Remote listen-back (mock slot)' },
@@ -86,7 +86,7 @@ export default function ProfileMeetEngagement({ musician, viewerIsOwner }) {
   const onConfirm = () => {
     setProposalOutcome('confirmed')
     setShowCounter(false)
-    toast.success('Slot confirmed (prototype — no backend).')
+    toast.success('Slot confirmed.')
   }
 
   const onDecline = () => {
@@ -105,7 +105,7 @@ export default function ProfileMeetEngagement({ musician, viewerIsOwner }) {
       return
     }
     setProposalOutcome('countered')
-    toast.success('Counter sent (prototype).')
+    toast.success('Counter sent.')
   }
 
   const isYouProfile = musician.id === 'you'
