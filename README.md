@@ -4,17 +4,7 @@ Concept-only Next.js app (mock data, no backend). Vampr-inspired flows (discover
 
 ## Run
 
-**If `package.json` is in your current directory** (you opened this app folder in the terminal):
-
 ```bash
-npm install
-npm run dev
-```
-
-**If you are at the parent repository root** (this app lives in a subfolder):
-
-```bash
-cd musician-discovery-prototype
 npm install
 npm run dev
 ```
