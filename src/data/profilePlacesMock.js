@@ -2,11 +2,11 @@
  * Mock places to play or rent — studios, venues, rehearsal rooms with photo albums.
  */
 
+import { mockImage } from '@/data/mockImages'
+
 /** @typedef {{ id: string, url: string, caption?: string }} PlacePhoto */
 
 /** @typedef {{ id: string, name: string, type: 'venue'|'rehearsal'|'home_studio'|'outdoor', purpose: 'work'|'fun'|'both', city: string, description: string, hourlyRate?: string, capacity?: number, amenities?: string[], photos: PlacePhoto[], ownerId: string }} PlaceListing */
-
-const U = 'https://images.unsplash.com'
 
 /** @type {Record<string, PlaceListing[]>} */
 const BY_MUSICIAN = {
@@ -25,17 +25,17 @@ const BY_MUSICIAN = {
       photos: [
         {
           id: 'you-p1-a',
-          url: `${U}/photo-1598487032696-e8a752d08a18?w=900&h=650&fit=crop`,
+          url: mockImage('studioRoom', 900, 650),
           caption: 'Control room — Apollo + monitors',
         },
         {
           id: 'you-p1-b',
-          url: `${U}/photo-1511379936296-1b3dc1e1fad1?w=900&h=650&fit=crop`,
+          url: mockImage('vocalMic', 900, 650),
           caption: 'Vocal booth',
         },
         {
           id: 'you-p1-c',
-          url: `${U}/photo-1516280440614-37939bbacd81?w=900&h=650&fit=crop`,
+          url: mockImage('musicianPortrait', 900, 650),
           caption: 'Live room corner',
         },
       ],
@@ -57,12 +57,12 @@ const BY_MUSICIAN = {
       photos: [
         {
           id: '1-p1-a',
-          url: `${U}/photo-1516280440614-37939bbacd81?w=900&h=650&fit=crop`,
+          url: mockImage('musicianPortrait', 900, 650),
           caption: 'Courtyard setup',
         },
         {
           id: '1-p1-b',
-          url: `${U}/photo-1493225457124-a3eb161ffa5f?w=900&h=650&fit=crop`,
+          url: mockImage('liveConcert', 900, 650),
           caption: 'Evening session light',
         },
       ],
@@ -81,17 +81,17 @@ const BY_MUSICIAN = {
       photos: [
         {
           id: '1-p2-a',
-          url: `${U}/photo-1514525253161-7a46d19cd819?w=900&h=650&fit=crop`,
+          url: mockImage('stageLights', 900, 650),
           caption: 'Rooftop view at golden hour',
         },
         {
           id: '1-p2-b',
-          url: `${U}/photo-1470225620780-dba8ba36b745?w=900&h=650&fit=crop`,
+          url: mockImage('djDeck', 900, 650),
           caption: 'Acoustic set layout',
         },
         {
           id: '1-p2-c',
-          url: `${U}/photo-1459749411176-04c624e0bc2d?w=900&h=650&fit=crop`,
+          url: mockImage('liveConcert', 900, 650),
           caption: 'Audience area',
         },
       ],
@@ -113,12 +113,12 @@ const BY_MUSICIAN = {
       photos: [
         {
           id: '2-p1-a',
-          url: `${U}/photo-1519892300165-c27d1d47f784?w=900&h=650&fit=crop`,
+          url: mockImage('drums', 900, 650),
           caption: 'Kit end of the room',
         },
         {
           id: '2-p1-b',
-          url: `${U}/photo-1511379936296-1b3dc1e1fad1?w=900&h=650&fit=crop`,
+          url: mockImage('electricGuitar', 900, 650),
           caption: 'Amp corner + PA',
         },
       ],
@@ -137,12 +137,12 @@ const BY_MUSICIAN = {
       photos: [
         {
           id: '2-p2-a',
-          url: `${U}/photo-1506157786151-54500f258709?w=900&h=650&fit=crop`,
+          url: mockImage('stageLights', 900, 650),
           caption: 'Stage facing the harbour',
         },
         {
           id: '2-p2-b',
-          url: `${U}/photo-1429962714451-bb934ec75da1?w=900&h=650&fit=crop`,
+          url: mockImage('djDeck', 900, 650),
           caption: 'Weekend crowd',
         },
       ],

@@ -17,7 +17,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 
-const U = 'https://images.unsplash.com'
+import { mockImage } from '@/data/mockImages'
 
 function uid() {
   return `up-${Date.now()}`
@@ -86,7 +86,7 @@ export default function ProfilePlaces({ musician, viewerIsOwner }) {
       photos: [
         {
           id: `${id}-a`,
-          url: `${U}/photo-1598487032696-e8a752d08a18?w=900&h=650&fit=crop`,
+          url: mockImage('studioRoom', 900, 650),
           caption: 'Space preview (placeholder)',
         },
       ],

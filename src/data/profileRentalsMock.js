@@ -3,9 +3,9 @@
  * User posts persist in localStorage (collabs-style).
  */
 
-/** @typedef {{ id: string, instrument: string, description: string, dailyRate?: string, location: string, condition: 'excellent'|'good'|'fair', available: boolean, photoUrl?: string, ownerId: string, useCase?: string }} RentalListing */
+import { mockImage } from '@/data/mockImages'
 
-const U = 'https://images.unsplash.com'
+/** @typedef {{ id: string, instrument: string, description: string, dailyRate?: string, location: string, condition: 'excellent'|'good'|'fair', available: boolean, photoUrl?: string, ownerId: string, useCase?: string }} RentalListing */
 
 /** @type {Record<string, RentalListing[]>} */
 const BY_MUSICIAN = {
@@ -19,7 +19,7 @@ const BY_MUSICIAN = {
       location: 'Lecce',
       condition: 'excellent',
       available: true,
-      photoUrl: `${U}/photo-1520523839897-bd7586fc483e?w=800&h=600&fit=crop`,
+      photoUrl: mockImage('keyboard'),
       ownerId: 'you',
       useCase: 'Tour backup · last-minute session',
     },
@@ -31,7 +31,7 @@ const BY_MUSICIAN = {
       location: 'Lecce',
       condition: 'good',
       available: true,
-      photoUrl: `${U}/photo-1598487032696-e8a752d08a18?w=800&h=600&fit=crop`,
+      photoUrl: mockImage('vocalMic'),
       ownerId: 'you',
       useCase: 'Vocal booth · podcast · scratch demos',
     },
@@ -46,7 +46,7 @@ const BY_MUSICIAN = {
       location: 'Galatina',
       condition: 'good',
       available: true,
-      photoUrl: `${U}/photo-1510915361894-b8f52600298a?w=800&h=600&fit=crop`,
+      photoUrl: mockImage('acousticGuitar'),
       ownerId: '1',
       useCase: 'Songwriting retreat · unplugged set',
     },
@@ -58,6 +58,7 @@ const BY_MUSICIAN = {
       location: 'Galatina',
       condition: 'excellent',
       available: true,
+      photoUrl: mockImage('vocalMic', 800, 600),
       ownerId: '1',
       useCase: 'Last-minute vocal session',
     },
@@ -72,7 +73,7 @@ const BY_MUSICIAN = {
       location: 'Gallipoli',
       condition: 'good',
       available: true,
-      photoUrl: `${U}/photo-1519892300165-c27d1d47f784?w=800&h=600&fit=crop`,
+      photoUrl: mockImage('drums'),
       ownerId: '2',
       useCase: 'Tour fill-in · band rehearsal',
     },
@@ -84,6 +85,7 @@ const BY_MUSICIAN = {
       location: 'Gallipoli',
       condition: 'excellent',
       available: false,
+      photoUrl: mockImage('sampler'),
       ownerId: '2',
       useCase: 'Live tracks · hybrid set',
     },
