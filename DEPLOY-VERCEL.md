@@ -1,12 +1,12 @@
 # Deploy on Vercel
 
-Production app: **https://musician-discovery-prototype.vercel.app**
+Production app: **https://music-talent.vercel.app**
 
 The project is linked to GitHub (`Betteronsaturday/music-talent`). Pushes to **`main`** deploy automatically.
 
 ## GitHub → Vercel (recommended)
 
-1. [Vercel Dashboard](https://vercel.com) → project **musician-discovery-prototype**.
+1. [Vercel Dashboard](https://vercel.com) → project **music-talent**.
 2. **Settings → Git** should show `Betteronsaturday/music-talent`, branch `main`, root directory **`.`**.
 3. Push to `main` on GitHub; Vercel builds with `npm run build`.
 

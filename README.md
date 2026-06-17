@@ -2,7 +2,7 @@
 
 A **Next.js** web app for discovering musicians, browsing a regional map, posting collaboration opportunities, and exploring rich musician profiles. The current version runs entirely on **mock data** in the browser — there is no backend, authentication, or payment flow yet. It is designed as a working UI and product shell you can extend into a full platform.
 
-**Live demo:** [musician-discovery-prototype.vercel.app](https://musician-discovery-prototype.vercel.app)
+**Live demo:** [music-talent.vercel.app](https://music-talent.vercel.app)
 
 ---
 
