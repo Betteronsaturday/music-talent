@@ -5,6 +5,8 @@ import { useRouter } from 'next/router'
 import MusicianShell from '../../../components/musicians/MusicianShell'
 import AvailabilityBadge from '../../../components/musicians/AvailabilityBadge'
 import ProfilePortfolio from '../../../components/musicians/ProfilePortfolio'
+import ProfilePlaces from '../../../components/musicians/ProfilePlaces'
+import ProfileRentals from '../../../components/musicians/ProfileRentals'
 import ProfileResume from '../../../components/musicians/ProfileResume'
 import ProfileMeetEngagement from '../../../components/musicians/ProfileMeetEngagement'
 import {
@@ -173,6 +175,8 @@ export default function MusicianProfilePage({ id }) {
           </CardContent>
         </Card>
 
+        <ProfileRentals musician={musician} viewerIsOwner={isYou} />
+        <ProfilePlaces musician={musician} viewerIsOwner={isYou} />
         <ProfilePortfolio musician={musician} viewerIsOwner={isYou} />
       </div>
     </MusicianShell>
