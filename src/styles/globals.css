@@ -244,4 +244,33 @@
     margin: 10px 12px;
     line-height: 1.35;
   }
+
+  .browse-map-chip-wrap {
+    background: transparent !important;
+    border: none !important;
+  }
+
+  .browse-map-chip {
+    display: inline-flex;
+    align-items: center;
+    max-width: 160px;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 18px;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-shadow:
+      0 1px 10px rgba(0, 0, 0, 0.12),
+      0 4px 5px rgba(0, 0, 0, 0.14),
+      0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  }
+
+  .browse-map-chip span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
