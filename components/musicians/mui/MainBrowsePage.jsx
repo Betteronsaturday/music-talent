@@ -14,19 +14,13 @@ import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import TextField from '@mui/material/TextField'
 import InputAdornment from '@mui/material/InputAdornment'
-import ToggleButton from '@mui/material/ToggleButton'
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 import Avatar from '@mui/material/Avatar'
 import Paper from '@mui/material/Paper'
 import Fab from '@mui/material/Fab'
-import BottomNavigation from '@mui/material/BottomNavigation'
-import BottomNavigationAction from '@mui/material/BottomNavigationAction'
 import SearchIcon from '@mui/icons-material/Search'
 import MicNoneIcon from '@mui/icons-material/MicNone'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutlineOutlined'
 import MapIcon from '@mui/icons-material/Map'
-import TravelExploreIcon from '@mui/icons-material/TravelExplore'
-import HandshakeIcon from '@mui/icons-material/Handshake'
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
 import { toast } from 'sonner'
 import '@fontsource/roboto/400.css'
@@ -40,19 +34,8 @@ import { buildDiscoveryItems, discoveryMapMarkers } from '@/lib/discoveryItems'
 import dynamic from 'next/dynamic'
 import SegmentFilters from './SegmentFilters'
 import DiscoveryCard from './DiscoveryCard'
-import DiscoverProtoPanel from './DiscoverProtoPanel'
-import CollabsProtoPanel from './CollabsProtoPanel'
 
 const BrowseMapColored = dynamic(() => import('./BrowseMapColored'), { ssr: false })
-
-const VIEW_TABS = [
-  { id: 'map', label: 'Map', Icon: MapIcon },
-  { id: 'discover', label: 'Discover', Icon: TravelExploreIcon },
-  { id: 'collabs', label: 'Collabs', Icon: HandshakeIcon },
-]
-
-const BOTTOM_NAV_H = 64
-const MOBILE_MAP_FAB_OFFSET = BOTTOM_NAV_H + 16
 
 function applyDiscoveryFilters(items, { city, instrument, genre }) {
   return items.filter((item) => {
@@ -75,8 +58,8 @@ function MainBrowseContent() {
   const theme = useTheme()
   const isPhone = useMediaQuery(theme.breakpoints.down('sm'))
   const isDesktopSplit = useMediaQuery(theme.breakpoints.up('lg'))
-
   const router = useRouter()
+
   const browse = useDiscoverBrowseState()
   const { filtered, city, instrument, genre, userLocationForMap } = browse
 
@@ -86,11 +69,12 @@ function MainBrowseContent() {
   const [searchQuery, setSearchQuery] = useState('')
   const [mobileMapOpen, setMobileMapOpen] = useState(false)
 
-  const viewTab = useMemo(() => {
-    const raw = router.query.tab
-    const t = Array.isArray(raw) ? raw[0] : raw
-    return t === 'discover' || t === 'collabs' ? t : 'map'
-  }, [router.query.tab])
+  useEffect(() => {
+    if (!router.isReady) return
+    if (router.query.tab) {
+      router.replace('/musicians/map', undefined, { shallow: true })
+    }
+  }, [router.isReady, router.query.tab, router])
 
   useEffect(() => {
     setUserCollabs(readUserCollabs())
@@ -108,16 +92,16 @@ function MainBrowseContent() {
 
   useEffect(() => {
     setMobileMapOpen(false)
-  }, [viewTab, segment])
+  }, [segment])
 
   useEffect(() => {
-    if (!isPhone || viewTab !== 'map') return
+    if (!isPhone) return
     const prev = document.body.style.overflow
     document.body.style.overflow = mobileMapOpen ? 'hidden' : ''
     return () => {
       document.body.style.overflow = prev
     }
-  }, [mobileMapOpen, isPhone, viewTab])
+  }, [mobileMapOpen, isPhone])
 
   const discoveryItems = useMemo(() => {
     const base = buildDiscoveryItems({
@@ -135,25 +119,10 @@ function MainBrowseContent() {
 
   const mapMarkers = useMemo(() => discoveryMapMarkers(discoveryItems), [discoveryItems])
 
-  const setViewTab = (tab) => {
-    const next = tab || 'map'
-    router.replace({ pathname: '/musicians/map', query: next === 'map' ? {} : { tab: next } }, undefined, {
-      shallow: true,
-    })
-  }
-
-  const matchLabel =
-    viewTab === 'map'
-      ? `${discoveryItems.length} result${discoveryItems.length === 1 ? '' : 's'} in Province of Lecce`
-      : viewTab === 'discover'
-        ? `${browse.displayed.length} musicians match this view`
-        : `${userCollabs.length + 3} collab posts (mock)`
-
-  const showMapFab = isPhone && viewTab === 'map' && !mobileMapOpen
-  const showListFab = isPhone && viewTab === 'map' && mobileMapOpen
+  const matchLabel = `${discoveryItems.length} result${discoveryItems.length === 1 ? '' : 's'} in Province of Lecce`
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', pb: isPhone ? `${BOTTOM_NAV_H + 8}px` : 4 }}>
+    <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', pb: 4 }}>
       <Box
         component="header"
         sx={{
@@ -236,65 +205,17 @@ function MainBrowseContent() {
             )}
           </Stack>
 
-          {!isPhone ? (
-            <Stack spacing={2}>
-              <ToggleButtonGroup
-                exclusive
-                value={viewTab}
-                onChange={(_, v) => v && setViewTab(v)}
-                size="small"
-                sx={{
-                  alignSelf: 'flex-start',
-                  bgcolor: 'background.paper',
-                  borderRadius: '16px',
-                  border: '1px solid',
-                  borderColor: 'grey.200',
-                  p: 0.5,
-                  width: { sm: '100%', md: 'auto' },
-                  display: 'flex',
-                  '& .MuiToggleButton-root': {
-                    border: 0,
-                    borderRadius: '9999px !important',
-                    px: 2,
-                    flex: { sm: 1, md: '0 1 auto' },
-                    textTransform: 'none',
-                    '&.Mui-selected': {
-                      bgcolor: 'primary.main',
-                      color: 'primary.contrastText',
-                      '&:hover': { bgcolor: 'primary.dark' },
-                    },
-                  },
-                }}
-              >
-                {VIEW_TABS.map(({ id, label, Icon }) => (
-                  <ToggleButton key={id} value={id}>
-                    <Icon sx={{ fontSize: 18, mr: 0.75 }} />
-                    {label}
-                  </ToggleButton>
-                ))}
-              </ToggleButtonGroup>
-              {viewTab === 'map' ? (
-                <SegmentFilters
-                  value={segment}
-                  onChange={setSegment}
-                  onFilterClick={() => toast.message('Advanced filters — Province of Lecce (coming soon).')}
-                />
-              ) : null}
-            </Stack>
-          ) : (
-            <>
-              <Typography variant="caption" color="text.secondary" sx={{ pl: 0.5 }}>
-                Province of Lecce · Salento
-              </Typography>
-              {viewTab === 'map' ? (
-                <SegmentFilters
-                  value={segment}
-                  onChange={setSegment}
-                  onFilterClick={() => toast.message('Advanced filters — Province of Lecce (coming soon).')}
-                />
-              ) : null}
-            </>
-          )}
+          {isPhone ? (
+            <Typography variant="caption" color="text.secondary" sx={{ pl: 0.5 }}>
+              Province of Lecce · Salento
+            </Typography>
+          ) : null}
+
+          <SegmentFilters
+            value={segment}
+            onChange={setSegment}
+            onFilterClick={() => toast.message('Advanced filters — Province of Lecce (coming soon).')}
+          />
         </Stack>
       </Box>
 
@@ -303,102 +224,88 @@ function MainBrowseContent() {
           px: { xs: 2, sm: 3, md: 8 },
           pt: { xs: 2, md: 3 },
           pb: { xs: 2, md: 4 },
-          display: mobileMapOpen && isPhone && viewTab === 'map' ? 'none' : 'block',
+          display: mobileMapOpen && isPhone ? 'none' : 'block',
         }}
       >
-        {viewTab === 'map' ? (
-          <Stack spacing={{ xs: 2, md: 3 }}>
-            <Typography variant="body2" color="text.secondary">
-              {matchLabel}.
-            </Typography>
-            <Stack direction={{ xs: 'column', lg: 'row' }} spacing={3} alignItems="flex-start">
-              <Box
+        <Stack spacing={{ xs: 2, md: 3 }}>
+          <Typography variant="body2" color="text.secondary">
+            {matchLabel}.
+          </Typography>
+          <Stack direction={{ xs: 'column', lg: 'row' }} spacing={3} alignItems="flex-start">
+            <Box
+              sx={{
+                flex: 1,
+                display: 'flex',
+                width: '100%',
+                minWidth: 0,
+                flexDirection: isPhone ? 'column' : isDesktopSplit ? 'row' : 'row',
+                flexWrap: isDesktopSplit || isPhone ? 'nowrap' : 'wrap',
+                gap: { xs: 3, sm: 2.5, md: 3 },
+              }}
+            >
+              {discoveryItems.length ? (
+                discoveryItems.map((item) => (
+                  <DiscoveryCard
+                    key={item.id}
+                    title={item.title}
+                    description={item.description}
+                    imageUrl={item.imageUrl}
+                    href={item.href}
+                    compact={isPhone}
+                  />
+                ))
+              ) : (
+                <Typography variant="body2" color="text.secondary" sx={{ py: 4 }}>
+                  No results match this view. Try another segment or clear filters.
+                </Typography>
+              )}
+            </Box>
+            {isDesktopSplit ? (
+              <Paper
+                elevation={0}
                 sx={{
-                  flex: 1,
-                  display: 'flex',
-                  width: '100%',
-                  minWidth: 0,
-                  flexDirection: isPhone ? 'column' : isDesktopSplit ? 'row' : 'row',
-                  flexWrap: isDesktopSplit || isPhone ? 'nowrap' : 'wrap',
-                  gap: { xs: 3, sm: 2.5, md: 3 },
+                  width: 533,
+                  flexShrink: 0,
+                  borderRadius: 1,
+                  overflow: 'hidden',
+                  border: '1px solid',
+                  borderColor: 'grey.200',
+                  minHeight: 420,
+                  position: 'sticky',
+                  top: 120,
+                  alignSelf: 'flex-start',
+                  height: 'min(72vh, 640px)',
                 }}
               >
-                {discoveryItems.length ? (
-                  discoveryItems.map((item) => (
-                    <DiscoveryCard
-                      key={item.id}
-                      title={item.title}
-                      description={item.description}
-                      imageUrl={item.imageUrl}
-                      href={item.href}
-                      compact={isPhone}
-                    />
-                  ))
-                ) : (
-                  <Typography variant="body2" color="text.secondary" sx={{ py: 4 }}>
-                    No results match this view. Try another segment or clear filters.
-                  </Typography>
-                )}
-              </Box>
-              {isDesktopSplit ? (
-                <Paper
-                  elevation={0}
-                  sx={{
-                    width: 533,
-                    flexShrink: 0,
-                    borderRadius: 1,
-                    overflow: 'hidden',
-                    border: '1px solid',
-                    borderColor: 'grey.200',
-                    minHeight: 420,
-                    position: 'sticky',
-                    top: 120,
-                    alignSelf: 'flex-start',
-                    height: 'min(72vh, 640px)',
-                  }}
-                >
-                  <BrowseMapColored markers={mapMarkers} userLocation={userLocationForMap} />
-                </Paper>
-              ) : !isPhone ? (
-                <Paper
-                  elevation={0}
-                  sx={{
-                    width: '100%',
-                    borderRadius: 1,
-                    overflow: 'hidden',
-                    border: '1px solid',
-                    borderColor: 'grey.200',
-                    height: { sm: 380, md: 420 },
-                  }}
-                >
-                  <BrowseMapColored markers={mapMarkers} userLocation={userLocationForMap} />
-                </Paper>
-              ) : null}
-            </Stack>
+                <BrowseMapColored markers={mapMarkers} userLocation={userLocationForMap} />
+              </Paper>
+            ) : !isPhone ? (
+              <Paper
+                elevation={0}
+                sx={{
+                  width: '100%',
+                  borderRadius: 1,
+                  overflow: 'hidden',
+                  border: '1px solid',
+                  borderColor: 'grey.200',
+                  height: { sm: 380, md: 420 },
+                }}
+              >
+                <BrowseMapColored markers={mapMarkers} userLocation={userLocationForMap} />
+              </Paper>
+            ) : null}
           </Stack>
-        ) : null}
-
-        {viewTab === 'discover' ? (
-          <Box className="dark rounded-xl border border-border bg-background p-3 sm:p-4 md:p-6">
-            <DiscoverProtoPanel browse={browse} />
-          </Box>
-        ) : null}
-
-        {viewTab === 'collabs' ? (
-          <Box className="dark rounded-xl border border-border bg-background p-3 sm:p-4 md:p-6">
-            <CollabsProtoPanel />
-          </Box>
-        ) : null}
+        </Stack>
       </Box>
 
-      {isPhone && viewTab === 'map' && mobileMapOpen ? (
+      {isPhone && mobileMapOpen ? (
         <Box
           sx={{
             position: 'fixed',
             top: 0,
             left: 0,
             right: 0,
-            bottom: BOTTOM_NAV_H,
+            bottom: 0,
             zIndex: 1050,
             bgcolor: 'background.paper',
           }}
@@ -407,14 +314,14 @@ function MainBrowseContent() {
         </Box>
       ) : null}
 
-      {showMapFab ? (
+      {isPhone && !mobileMapOpen ? (
         <Fab
           variant="extended"
           color="primary"
           onClick={() => setMobileMapOpen(true)}
           sx={{
             position: 'fixed',
-            bottom: MOBILE_MAP_FAB_OFFSET,
+            bottom: 24,
             left: '50%',
             transform: 'translateX(-50%)',
             zIndex: 1200,
@@ -428,14 +335,14 @@ function MainBrowseContent() {
         </Fab>
       ) : null}
 
-      {showListFab ? (
+      {isPhone && mobileMapOpen ? (
         <Fab
           variant="extended"
           color="inherit"
           onClick={() => setMobileMapOpen(false)}
           sx={{
             position: 'fixed',
-            bottom: MOBILE_MAP_FAB_OFFSET,
+            bottom: 24,
             left: '50%',
             transform: 'translateX(-50%)',
             zIndex: 1200,
@@ -451,45 +358,6 @@ function MainBrowseContent() {
           <FormatListBulletedIcon sx={{ mr: 1 }} />
           List
         </Fab>
-      ) : null}
-
-      {isPhone ? (
-        <Paper
-          elevation={8}
-          sx={{
-            position: 'fixed',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            zIndex: 1300,
-            borderTop: '1px solid',
-            borderColor: 'grey.200',
-            pb: 'env(safe-area-inset-bottom, 0px)',
-          }}
-        >
-          <BottomNavigation
-            showLabels
-            value={viewTab}
-            onChange={(_, v) => v && setViewTab(v)}
-            sx={{
-              height: BOTTOM_NAV_H,
-              bgcolor: 'background.paper',
-              '& .MuiBottomNavigationAction-root': {
-                minWidth: 0,
-                py: 1,
-                '&.Mui-selected': { color: 'primary.main' },
-              },
-              '& .MuiBottomNavigationAction-label': {
-                fontSize: '0.7rem',
-                '&.Mui-selected': { fontSize: '0.7rem' },
-              },
-            }}
-          >
-            {VIEW_TABS.map(({ id, label, Icon }) => (
-              <BottomNavigationAction key={id} value={id} label={label} icon={<Icon />} />
-            ))}
-          </BottomNavigation>
-        </Paper>
       ) : null}
     </Box>
   )
