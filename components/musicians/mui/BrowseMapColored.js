@@ -113,8 +113,9 @@ export default function BrowseMapColored({ markers, userLocation, fullscreen = f
       ref={elRef}
       style={{
         width: '100%',
-        height: fullscreen ? '100%' : '100%',
+        height: '100%',
         minHeight: fullscreen ? undefined : 420,
+        flex: fullscreen ? undefined : 1,
         borderRadius: fullscreen ? 0 : 8,
         overflow: 'hidden',
       }}

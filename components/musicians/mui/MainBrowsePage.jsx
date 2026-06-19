@@ -57,7 +57,9 @@ function applyDiscoveryFilters(items, { city, instrument, genre }) {
 function MainBrowseContent() {
   const theme = useTheme()
   const isPhone = useMediaQuery(theme.breakpoints.down('sm'))
-  const isDesktopSplit = useMediaQuery(theme.breakpoints.up('lg'))
+  const isSplitLayout = useMediaQuery(theme.breakpoints.up('md'))
+  const isWideGrid = useMediaQuery(theme.breakpoints.up('lg'))
+  const gridColumns = isPhone ? 1 : isWideGrid ? 3 : isSplitLayout ? 2 : 1
   const router = useRouter()
 
   const browse = useDiscoverBrowseState()
@@ -223,24 +225,34 @@ function MainBrowseContent() {
         sx={{
           px: { xs: 2, sm: 3, md: 8 },
           pt: { xs: 2, md: 3 },
-          pb: { xs: 2, md: 4 },
+          pb: { xs: 2, md: 6 },
           display: mobileMapOpen && isPhone ? 'none' : 'block',
         }}
       >
-        <Stack spacing={{ xs: 2, md: 3 }}>
-          <Typography variant="body2" color="text.secondary">
+        <Stack spacing={3}>
+          <Typography
+            variant="body2"
+            sx={{ color: '#80838d', lineHeight: 1.43, letterSpacing: '0.17px' }}
+          >
             {matchLabel}.
           </Typography>
-          <Stack direction={{ xs: 'column', lg: 'row' }} spacing={3} alignItems="flex-start">
+
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: { xs: 'column', md: 'row' },
+              alignItems: 'flex-start',
+              gap: 3,
+            }}
+          >
             <Box
               sx={{
-                flex: 1,
-                display: 'flex',
-                width: '100%',
+                flex: '1 1 0%',
                 minWidth: 0,
-                flexDirection: isPhone ? 'column' : isDesktopSplit ? 'row' : 'row',
-                flexWrap: isDesktopSplit || isPhone ? 'nowrap' : 'wrap',
-                gap: { xs: 3, sm: 2.5, md: 3 },
+                display: 'flex',
+                flexWrap: 'wrap',
+                alignContent: 'flex-start',
+                gap: 3,
               }}
             >
               {discoveryItems.length ? (
@@ -252,19 +264,21 @@ function MainBrowseContent() {
                     imageUrl={item.imageUrl}
                     href={item.href}
                     compact={isPhone}
+                    columns={gridColumns}
                   />
                 ))
               ) : (
-                <Typography variant="body2" color="text.secondary" sx={{ py: 4 }}>
+                <Typography variant="body2" color="text.secondary" sx={{ py: 4, width: '100%' }}>
                   No results match this view. Try another segment or clear filters.
                 </Typography>
               )}
             </Box>
-            {isDesktopSplit ? (
+
+            {isSplitLayout && !isPhone ? (
               <Paper
                 elevation={0}
                 sx={{
-                  width: 533,
+                  width: { md: 360, lg: 533 },
                   flexShrink: 0,
                   borderRadius: 1,
                   overflow: 'hidden',
@@ -275,26 +289,14 @@ function MainBrowseContent() {
                   top: 120,
                   alignSelf: 'flex-start',
                   height: 'min(72vh, 640px)',
-                }}
-              >
-                <BrowseMapColored markers={mapMarkers} userLocation={userLocationForMap} />
-              </Paper>
-            ) : !isPhone ? (
-              <Paper
-                elevation={0}
-                sx={{
-                  width: '100%',
-                  borderRadius: 1,
-                  overflow: 'hidden',
-                  border: '1px solid',
-                  borderColor: 'grey.200',
-                  height: { sm: 380, md: 420 },
+                  display: 'flex',
+                  flexDirection: 'column',
                 }}
               >
                 <BrowseMapColored markers={mapMarkers} userLocation={userLocationForMap} />
               </Paper>
             ) : null}
-          </Stack>
+          </Box>
         </Stack>
       </Box>
 

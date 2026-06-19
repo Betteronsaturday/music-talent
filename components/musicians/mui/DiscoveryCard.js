@@ -8,17 +8,22 @@ import Typography from '@mui/material/Typography'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 
 /**
- * @param {{ title: string, description: string, imageUrl: string, href: string, compact?: boolean }} props
+ * @param {{ title: string, description: string, imageUrl: string, href: string, compact?: boolean, columns?: 1 | 2 | 3 }} props
  */
-export default function DiscoveryCard({ title, description, imageUrl, href, compact = false }) {
+export default function DiscoveryCard({ title, description, imageUrl, href, compact = false, columns = 3 }) {
+  const cardWidth =
+    compact || columns === 1
+      ? '100%'
+      : columns === 2
+        ? 'calc((100% - 24px) / 2)'
+        : 'calc((100% - 48px) / 3)'
+
   return (
     <Box
       component="article"
       sx={{
-        width: compact
-          ? '100%'
-          : { xs: '100%', sm: 'calc(50% - 10px)', md: 'calc(50% - 12px)', lg: 'calc(33.333% - 16px)' },
-        maxWidth: compact ? 'none' : { lg: 280 },
+        width: cardWidth,
+        maxWidth: compact ? 'none' : columns === 3 ? 236 : 'none',
         display: 'flex',
         flexDirection: 'column',
         gap: 1,
@@ -28,9 +33,10 @@ export default function DiscoveryCard({ title, description, imageUrl, href, comp
         sx={{
           position: 'relative',
           width: '100%',
-          aspectRatio: compact ? '20 / 19' : { xs: '20 / 19', sm: '4 / 3' },
-          maxHeight: compact ? 320 : { xs: 320, sm: 200 },
-          borderRadius: compact ? 2 : { xs: 2, sm: 1 },
+          height: compact ? 240 : 200,
+          minHeight: compact ? 240 : 200,
+          flexShrink: 0,
+          borderRadius: 1,
           overflow: 'hidden',
           bgcolor: 'grey.200',
         }}
@@ -39,7 +45,7 @@ export default function DiscoveryCard({ title, description, imageUrl, href, comp
           src={imageUrl}
           alt=""
           fill
-          sizes={compact ? '100vw' : '(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 280px'}
+          sizes={compact ? '100vw' : '(max-width: 900px) 50vw, (max-width: 1200px) 33vw, 236px'}
           style={{ objectFit: 'cover' }}
         />
         <Box
@@ -47,7 +53,7 @@ export default function DiscoveryCard({ title, description, imageUrl, href, comp
             position: 'absolute',
             inset: 0,
             background:
-              'linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0) 35%, rgba(0,0,0,0) 75%, rgba(0,0,0,0.25) 100%)',
+              'linear-gradient(180deg, rgba(0,0,0,0.64) 7.69%, rgba(0,0,0,0) 39.9%, rgba(0,0,0,0) 79.8%, rgba(0,0,0,0.5) 100%)',
             pointerEvents: 'none',
           }}
         />
@@ -56,41 +62,43 @@ export default function DiscoveryCard({ title, description, imageUrl, href, comp
           aria-label="Save"
           sx={{
             position: 'absolute',
-            top: 8,
-            right: 8,
+            top: '6px',
+            right: '6px',
             color: 'white',
-            bgcolor: 'rgba(255,255,255,0.25)',
-            backdropFilter: 'blur(4px)',
-            '&:hover': { bgcolor: 'rgba(255,255,255,0.4)' },
+            p: 0.5,
+            '&:hover': { bgcolor: 'rgba(255,255,255,0.12)' },
           }}
         >
-          <FavoriteBorderIcon fontSize="small" />
+          <FavoriteBorderIcon sx={{ fontSize: 16 }} />
         </IconButton>
       </Box>
-      <Box sx={{ minWidth: 0, px: compact ? 0.25 : 0 }}>
+      <Box sx={{ minWidth: 0, display: 'flex', flexDirection: 'column', gap: 0.25 }}>
         <Typography
-          variant={compact ? 'subtitle1' : 'subtitle1'}
-          fontWeight={600}
+          variant="subtitle1"
+          fontWeight={500}
           color="text.primary"
           sx={{
             overflow: 'hidden',
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
-            fontSize: compact ? '1rem' : undefined,
+            fontSize: 16,
+            lineHeight: 1.75,
+            letterSpacing: '0.15px',
           }}
         >
           {title}
         </Typography>
         <Typography
           variant="body2"
-          color="text.secondary"
           sx={{
+            color: '#80838d',
             display: '-webkit-box',
             WebkitLineClamp: 2,
             WebkitBoxOrient: 'vertical',
             overflow: 'hidden',
-            mt: 0.25,
-            lineHeight: 1.45,
+            maxHeight: 40,
+            lineHeight: 1.43,
+            letterSpacing: '0.17px',
           }}
         >
           {description}
@@ -98,12 +106,14 @@ export default function DiscoveryCard({ title, description, imageUrl, href, comp
         <Typography
           component={Link}
           href={href}
-          variant="body2"
+          variant="subtitle2"
           fontWeight={500}
           sx={{
             color: 'text.primary',
             textDecoration: 'underline',
-            mt: 0.75,
+            fontSize: 14,
+            lineHeight: 1.57,
+            letterSpacing: '0.1px',
             display: 'inline-block',
           }}
         >
